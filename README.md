@@ -19,7 +19,8 @@ The script is primarily designed for browsers that store profile data in a simil
 
 *   Mozilla Firefox
 *   Waterfox
-*   Zen Browser 
+*   Zen Browser
+*   Floorp
 
 It *may* work with other Chromium-based browsers, but compatibility is not guaranteed.
 
@@ -36,6 +37,7 @@ It *may* work with other Chromium-based browsers, but compatibility is not guara
     *   **Firefox:** `%APPDATA%\Mozilla\Firefox\Profiles` (You can type this directly into the Explorer address bar)
     *   **Waterfox:** `%APPDATA%\Waterfox\Profiles`
     *   **Zen:** `%APPDATA%\Zen\Profiles`
+    *   **Floorp:** `%APPDATA%\Floorp\Profiles`
 3.  **Select source and destination directories:**  Use the "Browse" buttons to select the source profile directory (the profile you want to copy) and the destination directory (where you want to copy it to).
 4.  **Start the transfer:** Click the "Start Backup & Transfer" button.
 5.  **Monitor the progress:**  Observe the console log for progress messages and any errors.
