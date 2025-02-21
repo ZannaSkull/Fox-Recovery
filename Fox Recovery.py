@@ -1,5 +1,6 @@
 import os
 import shutil
+import glob
 import ctypes
 from datetime import datetime
 import tkinter as tk
@@ -76,12 +77,14 @@ def SessionBackp(SourceDir, DestDir, BackDir):
 
     BackupFiles = ['recovery.jsonlz4', 'recovery.baklz4', 'previous.jsonlz4']
 
+    UpgradeFiles = glob.glob(os.path.join(SourceBackDir, 'upgrade.jsonlz4-*'))
+
     for FileName in BackupFiles:
         TheFile = os.path.join(SourceBackDir, FileName)
         DestFile = os.path.join(DestinBackDir, FileName)
         CopyBackup(TheFile, DestFile, BackDir)
 
-def start_backup():
+def Start():
     SourceDir = SourceEntry.get().strip()
     DestDir = DestEntry.get().strip()
 
@@ -89,7 +92,9 @@ def start_backup():
         'logins.json',
         'cookies.sqlite',
         'extensions.json',
+        'places.sqlite',
         'prefs.js',
+        'bookmarks.json',
         'sessionstore.jsonlz4',
     ]
 
@@ -131,7 +136,7 @@ DestEntry.grid(row=1,column=1,padx=10,pady=5 ,sticky="ew")
 DestButton = tk.Button(root,text="Browse",command=SelectDestDirectory,bg=Buttoncolor ,fg=textcolor)
 DestButton.grid(row=1,column=2,padx=5,pady=5)
 
-Backupbutton = tk.Button(root,text="Start Backup & Transfer",command=start_backup,bg=Buttoncolor ,fg=textcolor)
+Backupbutton = tk.Button(root,text="Start Backup & Transfer",command=Start,bg=Buttoncolor ,fg=textcolor)
 Backupbutton.grid(row=2,columnspan=3,padx=10,pady=10)
 
 Consolelogs = tk.Text(root,width=80,height=20,bg=Backgroundcolor ,fg=Foregroundcolor)
