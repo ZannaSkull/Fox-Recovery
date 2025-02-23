@@ -14,10 +14,6 @@ textcolor = "#ffffff"
 Entrybackground = "#3f3f3f" 
 Entryforeground = "#ffffff" 
 
-def GamingName(title):
-    name = title.encode('cp1252')
-    ctypes.windll.kernel32.SetConsoleTitleA(name)
-
 if os.name == 'nt': 
     ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
 
