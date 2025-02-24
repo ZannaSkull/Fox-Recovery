@@ -22,8 +22,6 @@ The script is primarily designed for browsers that store profile data in a simil
 *   Zen Browser
 *   Floorp
 
-It *may* work with other Chromium-based browsers, but compatibility is not guaranteed.
-
 ## Installation
 
 1.  **Install Python:** Ensure you have Python 3.x installed on your system.  You can download it from [https://www.python.org/downloads/](https://www.python.org/downloads/).
