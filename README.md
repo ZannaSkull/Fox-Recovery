@@ -1,5 +1,10 @@
 # Fox Recovery: Browser Profile Transfer Tool
 
+<p align="center">
+<img src="https://i.pinimg.com/736x/88/68/b1/8868b1df06256cb30c96648503380d4d.jpg", width="500", height="500">
+</p>
+
+
 ## Description
 
 `Fox Recovery` is a Python-based utility designed to simplify the process of transferring browser profile data (including logins, cookies, extensions, and settings) from one location to another. This is useful when migrating to a new computer, creating a backup, or moving your profile between different installations of the same browser.
