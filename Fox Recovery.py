@@ -23,9 +23,14 @@ def MakeBackup():
     os.makedirs(BackDir, exist_ok=True)
     return BackDir
 
-def Logger(message):
+def Logger(message, level="info"):
     Consolelogs.config(state=tk.NORMAL) 
-    Consolelogs.insert(tk.END, message + '\n')
+    if level == "info":
+        Consolelogs.insert(tk.END, message + '\n', 'info')
+    elif level == "error":
+        Consolelogs.insert(tk.END, message + '\n', 'error')
+    elif level == "warning":
+        Consolelogs.insert(tk.END, message + '\n', 'warning')
     Consolelogs.see(tk.END) 
     Consolelogs.config(state=tk.DISABLED) 
 
@@ -34,11 +39,11 @@ def CopyBackup(TheFile, DestFile, BackDir):
         shutil.copy2(TheFile, DestFile)
         BackupFile = os.path.join(BackDir, os.path.basename(TheFile))
         shutil.copy2(TheFile, BackupFile)
-        Logger(f"Copied and backed up: {TheFile} -> {DestFile} and {BackupFile}")
+        Logger(f"Copied and backed up: {TheFile} -> {DestFile} and {BackupFile}", "info")
     except FileNotFoundError:
-        Logger(f"File not found: {TheFile}")
+        Logger(f"File not found: {TheFile}", "error")
     except Exception as e:
-        Logger(f"Error while copying {TheFile}: {e}")
+        Logger(f"Error while copying {TheFile}: {e}", "error")
 
 def CopyFiles(SourceDir, DestDir, FileToCopy, BackDir):
     if not os.path.exists(SourceDir):
@@ -57,9 +62,9 @@ def CopyFiles(SourceDir, DestDir, FileToCopy, BackDir):
 
     if os.path.exists(ExtensionsSource):
         shutil.copytree(ExtensionsSource, ExtensionsDest, dirs_exist_ok=True)
-        Logger(f"Copied extensions from '{ExtensionsSource}' to '{ExtensionsDest}'")
+        Logger(f"Copied extensions from '{ExtensionsSource}' to '{ExtensionsDest}'", "info")
     else:
-        Logger(f"No extensions found at '{ExtensionsSource}'")
+        Logger(f"No extensions found at '{ExtensionsSource}'", "warning")
 
 def SessionBackp(SourceDir, DestDir, BackDir):
     SourceBackDir = os.path.join(SourceDir, 'sessionstore-backups')
@@ -96,7 +101,7 @@ def Start():
 
     BackDir = MakeBackup()
     
-    Logger("Starting backup...")
+    Logger("Starting backup...", "info")
     
     CopyFiles(SourceDir, DestDir, FileToCopy, BackDir)
     SessionBackp(SourceDir, DestDir, BackDir)
@@ -120,46 +125,72 @@ root.title("Fox Recovery")
 
 root.configure(bg=Backgroundcolor)
 
+Consolelogs = tk.Text(root, width=80, height=20, bg=Backgroundcolor, fg=Foregroundcolor)
+Consolelogs.grid(row=3, columnspan=3, padx=10, pady=5)
+Consolelogs.tag_config('info', foreground='green')
+Consolelogs.tag_config('error', foreground='red')
+Consolelogs.tag_config('warning', foreground='orange')
+Consolelogs.config(state=tk.DISABLED)
+
 tk.Label(root, text="Source Profile Directory:", bg=Backgroundcolor, fg=Foregroundcolor).grid(row=0, column=0, padx=10, pady=5, sticky="w")
 SourceEntry = tk.Entry(root, width=50, bg=Entrybackground, fg=Entryforeground)
 SourceEntry.grid(row=0, column=1, padx=10, pady=5, sticky="ew")
 Sourcebutton = tk.Button(root, text="Browse", command=SelectSourceDirectory, bg=Buttoncolor, fg=textcolor)
-Sourcebutton.grid(row=0,column=2,padx=5,pady=5)
+Sourcebutton.grid(row=0, column=2, padx=5, pady=5)
 
-tk.Label(root, text="Destination Profile Directory:", bg=Backgroundcolor, fg=Foregroundcolor).grid(row=1,column=0,padx=10,pady=5,sticky="w")
-DestEntry = tk.Entry(root,width=50,bg=Entrybackground ,fg=Entryforeground)
-DestEntry.grid(row=1,column=1,padx=10,pady=5 ,sticky="ew")
-DestButton = tk.Button(root,text="Browse",command=SelectDestDirectory,bg=Buttoncolor ,fg=textcolor)
-DestButton.grid(row=1,column=2,padx=5,pady=5)
+tk.Label(root, text="Destination Profile Directory:", bg=Backgroundcolor, fg=Foregroundcolor).grid(row=1, column=0, padx=10, pady=5, sticky="w")
+DestEntry = tk.Entry(root, width=50, bg=Entrybackground, fg=Entryforeground)
+DestEntry.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
+DestButton = tk.Button(root, text="Browse", command=SelectDestDirectory, bg=Buttoncolor, fg=textcolor)
+DestButton.grid(row=1, column=2, padx=5, pady=5)
 
-Backupbutton = tk.Button(root,text="Start Backup & Transfer",command=Start,bg=Buttoncolor ,fg=textcolor)
-Backupbutton.grid(row=2,columnspan=3,padx=10,pady=10)
-
-Consolelogs = tk.Text(root,width=80,height=20,bg=Backgroundcolor ,fg=Foregroundcolor)
-Consolelogs.grid(row=3,columnspan=3,padx=10,pady=5)
-Consolelogs.config(state=tk.DISABLED)
+Backupbutton = tk.Button(root, text="Start Backup & Transfer", command=Start, bg=Buttoncolor, fg=textcolor)
+Backupbutton.grid(row=2, columnspan=3, padx=10, pady=10)
 
 InstructionsText = (
     "Instructions:\n"
-    "1. Select the source profile directory of your browser.\n"
-    "   (Usually located in the Roaming folder)\n"
-    "2. Select the destination profile directory where you want to transfer files.\n"
-    "3. Click on 'Start Backup & Transfer' to begin the process.\n"
+    "1. **Select the source profile directory**: Choose the profile directory of your browser that you want to backup.\n"
+    "   This is usually located in the 'Roaming' folder (e.g., `C:\\Users\\YourUsername\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles`).\n"
+    "   Make sure to select the correct profile folder (it should contain files like `places.sqlite`, `logins.json`, etc.).\n"
+    "2. **Select the destination profile directory**: Choose where you want to transfer the files.\n"
+    "   This can be a new profile directory or an existing one where you want to restore or merge data.\n"
+    "3. **Click on 'Start Backup & Transfer'**: Begin the backup and transfer process.\n"
+    "   The selected files will be copied to the destination directory and a backup will be created in a separate folder.\n"
+    "\n"
+    "Important: Ensure that the browser is closed before starting the process to avoid data corruption."
 )
 
-ReadThat = tk.Label(
-    root,
-    text=InstructionsText,
-    bg=Backgroundcolor,
-    fg=textcolor,
-    justify=tk.LEFT,
-    anchor='nw',
-    padx=10,
-    pady=10
-)
-ReadThat.grid(row=0, column=3, rowspan=4, padx=10, pady=5, sticky='nw')
+def FoxBold(text):
+    import re
+    BoldTexts = re.findall(r'\*\*(.*?)\*\*', text)
+    return BoldTexts
 
-root.grid_columnconfigure(1 ,weight=1)
-root.grid_rowconfigure(3 ,weight=1)
+BoldTexts = FoxBold(InstructionsText)
+
+InstructionsFrame = tk.Frame(root, bg=Backgroundcolor)
+InstructionsFrame.grid(row=0, column=3, rowspan=4, padx=10, pady=5, sticky='nw')
+
+def Foxlabel(text, bold=False):
+    if bold:
+        label = tk.Label(InstructionsFrame, text=text, bg=Backgroundcolor, fg=textcolor, font=('Helvetica', 10, 'bold'))
+    else:
+        label = tk.Label(InstructionsFrame, text=text, bg=Backgroundcolor, fg=textcolor, wraplength=250)
+    return label
+
+lines = InstructionsText.split('\n')
+for line in lines:
+    if '**' in line:
+        BoldText = FoxBold(line)[0]
+        NotABoldText = line.replace(f'**{BoldText}**', '')
+        
+        tk.Label(InstructionsFrame, text=NotABoldText, bg=Backgroundcolor, fg=textcolor, wraplength=250).pack(fill='x')
+        
+        Foxlabel(BoldText, bold=True).pack(fill='x')
+    else:
+        tk.Label(InstructionsFrame, text=line, bg=Backgroundcolor, fg=textcolor, wraplength=250).pack(fill='x')
+
+
+root.grid_columnconfigure(1, weight=1)
+root.grid_rowconfigure(3, weight=1)
 
 root.mainloop()
