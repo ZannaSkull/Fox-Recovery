@@ -27,6 +27,7 @@ The script is primarily designed for browsers that store profile data in a simil
 *   Zen Browser
 *   Floorp
 *   Midori
+*   Librewolf
 
 ## Installation
 
@@ -43,6 +44,7 @@ The script is primarily designed for browsers that store profile data in a simil
     *   **Zen:** `%APPDATA%\Zen\Profiles`
     *   **Floorp:** `%APPDATA%\Floorp\Profiles`
     *   **Midori:** `%APPDATA%\Midori\Profiles`
+    *   **Librewolf:** `%APPDATA%\Librewolf\Profiles`
 3.  **Select source and destination directories:**  Use the "Browse" buttons to select the source profile directory (the profile you want to copy) and the destination directory (where you want to copy it to).
 4.  **Start the transfer:** Click the "Start Backup & Transfer" button.
 5.  **Monitor the progress:**  Observe the console log for progress messages and any errors.
