@@ -1,4 +1,4 @@
-# Fox Recovery: Browser Profile Transfer Tool
+# Fox Recovery: A program to change browsers without logging in a second time 
 
 <p align="center">
 <img src="https://i.pinimg.com/736x/88/68/b1/8868b1df06256cb30c96648503380d4d.jpg", width="500", height="500">
