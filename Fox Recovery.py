@@ -10,7 +10,7 @@ from tkinter import messagebox, filedialog
 Backgroundcolor = "#2e2e2e" 
 Foregroundcolor = "#ffffff"
 Buttoncolor = "#4a4a4a" 
-Textcolor = "#ffffff" 
+textcolor = "#ffffff" 
 Entrybackground = "#3f3f3f" 
 Entryforeground = "#ffffff" 
 
